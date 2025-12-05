@@ -1,0 +1,41 @@
+{
+  "name": "virtual-memory-frontend",
+  "version": "1.0.0",
+  "description": "React frontend for Virtual Memory Simulator",
+  "private": true,
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "typescript": "^5.0.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "recharts": "^2.5.0",
+    "axios": "^1.4.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.0.0",
+    "vite": "^4.3.0"
+  },
+  "scripts": {
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

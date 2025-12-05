@@ -1,0 +1,103 @@
+.page-table-view {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.process-table h3 {
+  margin: 0 0 0.75rem 0;
+  color: #2196f3;
+  font-size: 1.1rem;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+thead {
+  background: #667eea;
+  color: white;
+}
+
+th {
+  padding: 0.75rem;
+  text-align: left;
+  font-weight: 600;
+}
+
+tbody tr {
+  border-bottom: 1px solid #eee;
+  transition: background 0.2s;
+}
+
+tbody tr:hover {
+  background: #f5f5f5;
+}
+
+tbody tr.valid {
+  background: #e8f5e9;
+}
+
+tbody tr.invalid {
+  background: #ffebee;
+  opacity: 0.6;
+}
+
+td {
+  padding: 0.75rem;
+}
+
+.status {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 24px;
+  font-weight: bold;
+}
+
+.status.valid {
+  background: #4caf50;
+  color: white;
+}
+
+.status.invalid {
+  background: #f44336;
+  color: white;
+}
+
+.flags {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.flag-badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 3px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: white;
+}
+
+.flag-badge.dirty {
+  background: #ff9800;
+}
+
+.flag-badge.referenced {
+  background: #4caf50;
+}
+
+.page-table-empty {
+  padding: 2rem;
+  text-align: center;
+  color: #999;
+  font-style: italic;
+}

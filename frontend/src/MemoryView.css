@@ -1,0 +1,115 @@
+.memory-view {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.frames-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+.frame-box {
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+}
+
+.frame-box.empty {
+  background: #f9f9f9;
+  border-style: dashed;
+}
+
+.frame-box.occupied {
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  border-color: #2196f3;
+}
+
+.frame-box.referenced {
+  border-color: #4caf50;
+  box-shadow: 0 0 8px rgba(76, 175, 80, 0.3);
+  animation: pulse 1s ease-in-out;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.frame-number {
+  font-size: 0.75rem;
+  color: #666;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.frame-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.frame-info {
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.frame-info strong {
+  color: #2196f3;
+}
+
+.frame-flags {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.flag {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  text-align: center;
+  line-height: 24px;
+  font-weight: bold;
+  font-size: 0.75rem;
+  color: white;
+}
+
+.flag.dirty {
+  background: #ff9800;
+}
+
+.flag.referenced {
+  background: #4caf50;
+}
+
+.frame-empty-label {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  font-style: italic;
+}
+
+.legend {
+  display: flex;
+  gap: 1.5rem;
+  padding: 0.75rem;
+  background: #f5f5f5;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
