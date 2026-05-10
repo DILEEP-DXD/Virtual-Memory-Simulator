@@ -1,95 +1,81 @@
 import React, { useState } from 'react';
-import SimulatorConfig from './SimulatorConfig';
-import MemoryView from './MemoryView';
-import PageTableView from './PageTableView';
-import SegmentView from './SegmentView';
-import TracePlayer from './TracePlayer';
-import Graphs from './Graphs';
-import ReportPanel from './ReportPanel';
+import { Sidebar } from './components/Sidebar';
+import { ConfigurePanel, SimConfig } from './components/ConfigurePanel';
+import { SimulatePanel } from './components/SimulatePanel';
+import { ComparePanel } from './components/ComparePanel';
+import { AddressTranslatorPanel } from './components/AddressTranslatorPanel';
+import { runSimulation } from './engine/simulator';
+import { SimulationResult } from './engine/types';
 import './App.css';
 
-export interface TimelineEvent {
-  step: number;
-  access: { pid: number; page: number; write: boolean };
-  hit: boolean;
-  action: string;
-  frames: any[];
-  page_tables: Record<string, any[]>;
-  time_ms: number;
-}
-
-export interface SimulationResult {
-  timeline: TimelineEvent[];
-  metrics: any;
-  config: any;
-}
-
 const App: React.FC = () => {
-  const [result, setResult] = useState<SimulationResult | null>(null);
-  const [currentStep, setCurrentStep] = useState<number>(0);
-  const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const [activeTab, setActiveTab] = useState('configure');
+  
+  const [config, setConfig] = useState<SimConfig>({
+    algorithm: 'fifo',
+    numFrames: 3,
+    accesses: [],
+    speed: 'normal'
+  });
 
-  const handleSimulationComplete = (simulationResult: SimulationResult) => {
-    setResult(simulationResult);
-    setCurrentStep(0);
-    setIsPlaying(false);
+  const [result, setResult] = useState<SimulationResult | null>(null);
+
+  const handleRun = () => {
+    if (config.accesses.length > 0) {
+      const res = runSimulation(config.algorithm, config.numFrames, config.accesses);
+      setResult(res);
+      setActiveTab('simulate');
+    }
   };
 
-  const currentEvent = result?.timeline[currentStep];
-
   return (
-    <div className="app">
-      <header className="app-header">
-        <h1>Virtual Memory Management Tool</h1>
-        <p>Interactive Paging and Segmentation Simulator</p>
-      </header>
-
-      <div className="app-container">
-        <div className="config-section">
-          <SimulatorConfig onSimulationComplete={handleSimulationComplete} />
-        </div>
-
-        {result && (
-          <>
-            <div className="control-section">
-              <TracePlayer
-                timeline={result.timeline}
-                currentStep={currentStep}
-                isPlaying={isPlaying}
-                onStepChange={setCurrentStep}
-                onPlayPause={setIsPlaying}
-              />
-            </div>
-
-            <div className="visualization-grid">
-              <div className="viz-panel">
-                <h2>Physical Memory (Frames)</h2>
-                <MemoryView frames={currentEvent?.frames || []} />
-              </div>
-
-              <div className="viz-panel">
-                <h2>Page Tables</h2>
-                <PageTableView pageTables={currentEvent?.page_tables || {}} />
-              </div>
-
-              <div className="viz-panel">
-                <h2>Segmentation View</h2>
-                <SegmentView frames={currentEvent?.frames || []} />
-              </div>
-
-              <div className="viz-panel full-width">
-                <h2>Performance Metrics</h2>
-                <Graphs timeline={result.timeline} currentStep={currentStep} />
-              </div>
-
-              <div className="viz-panel full-width">
-                <h2>Report & Export</h2>
-                <ReportPanel result={result} />
-              </div>
-            </div>
-          </>
+    <div className="app-container">
+      <Sidebar 
+        activeTab={activeTab} 
+        setActiveTab={setActiveTab} 
+        algorithm={config.algorithm}
+        numFrames={config.numFrames}
+      />
+      
+      <main className="main-content">
+        {activeTab === 'configure' && (
+          <ConfigurePanel config={config} setConfig={setConfig} onRun={handleRun} />
         )}
-      </div>
+        
+        {activeTab === 'simulate' && (
+          result ? (
+            <SimulatePanel 
+              result={result} 
+              config={config} 
+              onCompare={() => setActiveTab('compare')} 
+            />
+          ) : (
+            <div className="panel" style={{ textAlign: 'center', marginTop: '10vh' }}>
+              <h2 className="text-muted">No simulation running.</h2>
+              <button className="btn-primary" style={{ marginTop: '1rem' }} onClick={() => setActiveTab('configure')}>
+                Go to Configure
+              </button>
+            </div>
+          )
+        )}
+        
+        {activeTab === 'compare' && (
+          config.accesses.length > 0 ? (
+            <ComparePanel config={config} />
+          ) : (
+            <div className="panel" style={{ textAlign: 'center', marginTop: '10vh' }}>
+              <h2 className="text-muted">No configuration found to compare.</h2>
+              <button className="btn-primary" style={{ marginTop: '1rem' }} onClick={() => setActiveTab('configure')}>
+                Go to Configure
+              </button>
+            </div>
+          )
+        )}
+        
+        {activeTab === 'translator' && (
+          <AddressTranslatorPanel />
+        )}
+      </main>
     </div>
   );
 };

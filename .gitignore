@@ -40,6 +40,9 @@ yarn-debug.log*
 yarn-error.log*
 frontend/dist/
 frontend/build/
+frontend/.vite/
+coverage/
+*.tsbuildinfo
 
 # OS
 .DS_Store
